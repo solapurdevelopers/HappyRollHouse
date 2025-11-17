@@ -2,9 +2,41 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
+import { createBrowserRouter, RouterProvider } from "react-router-dom"
+import AuthLayout from './auth/AuthLayout.jsx'
+import store from "./store/store.js"
+import { Provider } from "react-redux"
+
+import {
+  NotFoundPage,
+} from './pages/index.js'
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    children: [
+      {
+        path: "/login",
+        element: 
+        <AuthLayout authentication={false}>
+          <Login />
+        </AuthLayout>,
+      },
+      // {
+      //   path: "/",
+      //   element:
+      //   <AuthLayout authentication>
+      //      <Dashboard />
+      //    </AuthLayout>,
+      // },
+    ],
+    errorElement: <NotFoundPage />
+  },
+]);
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+  <Provider store={store}>
+    <RouterProvider router={router} />
+  </Provider>
+);
